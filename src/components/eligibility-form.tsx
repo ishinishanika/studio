@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
-import { Loader2, Sparkles } from 'lucide-react';
+import { Loader2, Sparkles, Smile, Frown } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -12,7 +12,6 @@ import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { checkEligibilityAction, type EligibilityFormState } from '@/app/actions';
-import { BloodDropEmotionIcon } from './icons';
 
 const initialFormState: EligibilityFormState = {
   status: 'idle',
@@ -97,16 +96,17 @@ export function EligibilityForm() {
               <AlertTitle>
                 {state.result.isEligible ? 'Likely Eligible to Donate' : 'Potential Deferral'}
               </AlertTitle>
-              <AlertDescription>
+              <AlertDescription className="text-justify">
                 <p className="font-semibold">AI Assessment:</p>
                 {state.result.reasons}
               </AlertDescription>
             </div>
             <div className="basis-1/4 flex justify-center items-center">
-                <BloodDropEmotionIcon 
-                    isEligible={state.result.isEligible} 
-                    className="h-12 w-12 flex-shrink-0 drop-shadow-lg"
-                />
+                {state.result.isEligible ? (
+                    <Smile className="h-24 w-24 text-accent" />
+                ) : (
+                    <Frown className="h-24 w-24 text-destructive" />
+                )}
             </div>
           </div>
         </Alert>
@@ -116,13 +116,10 @@ export function EligibilityForm() {
            <div className="flex w-full items-center justify-between gap-4">
             <div className="flex-grow basis-3/4">
               <AlertTitle>Error</AlertTitle>
-              <AlertDescription>{state.message}</AlertDescription>
+              <AlertDescription className="text-justify">{state.message}</AlertDescription>
             </div>
             <div className="basis-1/4 flex justify-center items-center">
-                <BloodDropEmotionIcon 
-                    isEligible={false} 
-                    className="h-12 w-12 flex-shrink-0 drop-shadow-lg"
-                />
+                <Frown className="h-24 w-24 text-destructive" />
             </div>
           </div>
         </Alert>
