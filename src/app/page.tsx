@@ -15,7 +15,7 @@ export default function Home() {
         <Link href="/" className="flex items-center gap-2">
           <BloodyNetLogo className="h-8 w-8 text-primary" />
           <span className="text-xl font-bold tracking-tight text-primary">
-            bloody.net
+            LifeFlow
           </span>
         </Link>
       </header>
@@ -31,7 +31,7 @@ export default function Home() {
                   <p className="max-w-[600px] text-muted-foreground md:text-xl">
                     Join our community of heroes. Find local donation centers,
                     get notified of urgent needs, and track your life-saving
-                    journey with bloody.net.
+                    journey with LifeFlow.
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
@@ -58,7 +58,7 @@ export default function Home() {
         </section>
       </main>
       <footer className="flex items-center justify-center p-4 text-sm text-muted-foreground">
-        © {new Date().getFullYear()} bloody.net. All rights reserved.
+        © {new Date().getFullYear()} LifeFlow. All rights reserved.
       </footer>
     </div>
   );

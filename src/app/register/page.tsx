@@ -108,7 +108,7 @@ export default function RegisterPage() {
           <Link href="/" className="flex items-center gap-2">
             <BloodyNetLogo className="h-8 w-8 text-primary" />
             <span className="text-xl font-bold tracking-tight text-primary">
-              bloody.net
+              LifeFlow
             </span>
           </Link>
         </div>

@@ -61,7 +61,7 @@ export function AppLayout({ children }: AppLayoutProps) {
 
   const getPageTitle = () => {
     const currentItem = navItems.find((item) => pathname.startsWith(item.href));
-    return currentItem?.label || "bloody.net";
+    return currentItem?.label || "LifeFlow";
   }
 
   const handleLogout = async () => {
@@ -76,7 +76,7 @@ export function AppLayout({ children }: AppLayoutProps) {
           <Link href="/dashboard" className="flex items-center gap-2">
             <BloodyNetLogo className="size-8 shrink-0 text-primary" />
             <span className="text-lg font-semibold tracking-tight text-primary">
-              bloody.net
+              LifeFlow
             </span>
           </Link>
         </SidebarHeader>
