@@ -92,21 +92,29 @@ export function EligibilityForm() {
 
       {state.status === 'success' && state.result && (
         <Alert variant={state.result.isEligible ? 'success' : 'destructive'}>
-           <BloodDropEmotionIcon isEligible={state.result.isEligible} className="h-4 w-4" />
-          <AlertTitle>
-            {state.result.isEligible ? 'Likely Eligible to Donate' : 'Potential Deferral'}
-          </AlertTitle>
-          <AlertDescription>
-            <p className="font-semibold">AI Assessment:</p>
-            {state.result.reasons}
-          </AlertDescription>
+          <div className="flex w-full items-start justify-between gap-4">
+            <div className="flex-grow">
+              <AlertTitle>
+                {state.result.isEligible ? 'Likely Eligible to Donate' : 'Potential Deferral'}
+              </AlertTitle>
+              <AlertDescription>
+                <p className="font-semibold">AI Assessment:</p>
+                {state.result.reasons}
+              </AlertDescription>
+            </div>
+            <BloodDropEmotionIcon isEligible={state.result.isEligible} className="h-10 w-10 flex-shrink-0" />
+          </div>
         </Alert>
       )}
        {state.status === 'error' && (
         <Alert variant="destructive">
-          <BloodDropEmotionIcon isEligible={false} className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{state.message}</AlertDescription>
+           <div className="flex w-full items-start justify-between gap-4">
+            <div className="flex-grow">
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{state.message}</AlertDescription>
+            </div>
+            <BloodDropEmotionIcon isEligible={false} className="h-10 w-10 flex-shrink-0" />
+          </div>
         </Alert>
       )}
     </div>

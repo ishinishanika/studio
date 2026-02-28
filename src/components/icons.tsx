@@ -1,4 +1,5 @@
 import type { SVGProps } from "react";
+import { cn } from "@/lib/utils";
 
 export function LifeFlowLogo(props: SVGProps<SVGSVGElement>) {
   return (
@@ -21,6 +22,7 @@ export function BloodDropEmotionIcon({ isEligible, ...props }: SVGProps<SVGSVGEl
       viewBox="0 0 24 24"
       fill="currentColor"
       {...props}
+      className={cn("animate-blood-drop-bounce", props.className)}
     >
       <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
       {isEligible ? (
