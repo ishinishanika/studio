@@ -64,5 +64,3 @@ export const WHOLE_BLOOD_DONATION_INTERVAL_DAYS = 56;
 export function getNextDonationDate(lastDonation: Date): Date {
   return addDays(lastDonation, WHOLE_BLOOD_DONATION_INTERVAL_DAYS);
 }
-
-    
