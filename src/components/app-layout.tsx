@@ -38,7 +38,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { Button } from "@/components/ui/button";
-import { LifeFlowLogo } from "@/components/icons";
+import { BloodyNetLogo } from "@/components/icons";
 import { useAuth, useUser } from "@/firebase";
 import { ThemeToggleButton } from "./theme-toggle-button";
 
@@ -61,7 +61,7 @@ export function AppLayout({ children }: AppLayoutProps) {
 
   const getPageTitle = () => {
     const currentItem = navItems.find((item) => pathname.startsWith(item.href));
-    return currentItem?.label || "LifeFlow Connect";
+    return currentItem?.label || "bloody.net";
   }
 
   const handleLogout = async () => {
@@ -74,15 +74,10 @@ export function AppLayout({ children }: AppLayoutProps) {
       <Sidebar>
         <SidebarHeader>
           <Link href="/dashboard" className="flex items-center gap-2">
-            <LifeFlowLogo className="size-8 shrink-0 text-primary" />
-            <div className="flex flex-col">
-              <span className="text-lg font-semibold tracking-tight text-primary">
-                LifeFlow
-              </span>
-              <span className="text-xs text-muted-foreground -mt-1">
-                Connect
-              </span>
-            </div>
+            <BloodyNetLogo className="size-8 shrink-0 text-primary" />
+            <span className="text-lg font-semibold tracking-tight text-primary">
+              bloody.net
+            </span>
           </Link>
         </SidebarHeader>
         <SidebarContent>

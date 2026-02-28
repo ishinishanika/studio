@@ -2,7 +2,7 @@
 import type { SVGProps } from "react";
 import { cn } from "@/lib/utils";
 
-export function LifeFlowLogo(props: SVGProps<SVGSVGElement>) {
+export function BloodyNetLogo(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -10,7 +10,7 @@ export function LifeFlowLogo(props: SVGProps<SVGSVGElement>) {
       fill="currentColor"
       {...props}
     >
-      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm-1.11 11.16c-1.3-.5-2.71-.13-3.51.9l-1.48 1.88c-.18.23-.01.55.26.55h11.7c.28 0 .44-.31.26-.55l-1.48-1.88c-.8-1.03-2.21-1.4-3.51-.9-.55.21-1.15.21-1.7 0z" />
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
     </svg>
   );
 }

@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { LifeFlowLogo } from "@/components/icons";
+import { BloodyNetLogo } from "@/components/icons";
 import { useAuth, useFirestore, errorEmitter, FirestorePermissionError } from "@/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
@@ -106,9 +106,9 @@ export default function RegisterPage() {
        <div className="w-full max-w-md space-y-6">
         <div className="flex justify-center">
           <Link href="/" className="flex items-center gap-2">
-            <LifeFlowLogo className="h-8 w-8 text-primary" />
+            <BloodyNetLogo className="h-8 w-8 text-primary" />
             <span className="text-xl font-bold tracking-tight text-primary">
-              LifeFlow Connect
+              bloody.net
             </span>
           </Link>
         </div>

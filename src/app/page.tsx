@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { LifeFlowLogo } from "@/components/icons";
+import { BloodyNetLogo } from "@/components/icons";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 export default function Home() {
@@ -13,9 +13,9 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       <header className="p-4 md:px-6">
         <Link href="/" className="flex items-center gap-2">
-          <LifeFlowLogo className="h-8 w-8 text-primary" />
+          <BloodyNetLogo className="h-8 w-8 text-primary" />
           <span className="text-xl font-bold tracking-tight text-primary">
-            LifeFlow Connect
+            bloody.net
           </span>
         </Link>
       </header>
@@ -31,7 +31,7 @@ export default function Home() {
                   <p className="max-w-[600px] text-muted-foreground md:text-xl">
                     Join our community of heroes. Find local donation centers,
                     get notified of urgent needs, and track your life-saving
-                    journey with LifeFlow Connect.
+                    journey with bloody.net.
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
@@ -58,7 +58,7 @@ export default function Home() {
         </section>
       </main>
       <footer className="flex items-center justify-center p-4 text-sm text-muted-foreground">
-        © {new Date().getFullYear()} LifeFlow Connect. All rights reserved.
+        © {new Date().getFullYear()} bloody.net. All rights reserved.
       </footer>
     </div>
   );
