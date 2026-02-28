@@ -40,6 +40,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { LifeFlowLogo } from "@/components/icons";
 import { useAuth, useUser } from "@/firebase";
+import { ThemeToggleButton } from "./theme-toggle-button";
 
 type AppLayoutProps = {
   children: React.ReactNode;
@@ -107,7 +108,8 @@ export function AppLayout({ children }: AppLayoutProps) {
         <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm sm:h-16 sm:px-6">
           <SidebarTrigger className="md:hidden" />
           <h1 className="text-lg font-semibold md:text-xl">{getPageTitle()}</h1>
-          <div className="ml-auto flex items-center gap-4">
+          <div className="ml-auto flex items-center gap-2">
+            <ThemeToggleButton />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="rounded-full">
@@ -171,5 +173,3 @@ export function AppLayout({ children }: AppLayoutProps) {
     </SidebarProvider>
   );
 }
-
-    
