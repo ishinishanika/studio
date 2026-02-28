@@ -25,33 +25,35 @@ export function BloodDropEmotionIcon({ isEligible, ...props }: SVGProps<SVGSVGEl
       className={cn("animate-blood-drop-bounce", props.className)}
     >
       <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
-      {isEligible ? (
-        <>
-          {/* Happy Face */}
-          <circle cx="9.5" cy="9" r="1" fill="white" />
-          <circle cx="14.5" cy="9" r="1" fill="white" />
-          <path
-            d="M9.5 13c.5 1.5 4.5 1.5 5 0"
-            stroke="white"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            fill="none"
-          />
-        </>
-      ) : (
-        <>
-          {/* Sad Face */}
-          <circle cx="9.5" cy="9" r="1" fill="white" />
-          <circle cx="14.5" cy="9" r="1" fill="white" />
-          <path
-            d="M9.5 14c.5-1.5 4.5-1.5 5 0"
-            stroke="white"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            fill="none"
-          />
-        </>
-      )}
+      <g transform="rotate(180 12 10)">
+        {isEligible ? (
+          <>
+            {/* Happy Face (Upward Curve) */}
+            <circle cx="9.5" cy="9" r="1" fill="white" />
+            <circle cx="14.5" cy="9" r="1" fill="white" />
+            <path
+              d="M9.5 13c.5-1.5 4.5-1.5 5 0"
+              stroke="white"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              fill="none"
+            />
+          </>
+        ) : (
+          <>
+            {/* Sad Face (Downward Curve) */}
+            <circle cx="9.5" cy="9" r="1" fill="white" />
+            <circle cx="14.5" cy="9" r="1" fill="white" />
+            <path
+              d="M9.5 14c.5 1.5 4.5 1.5 5 0"
+              stroke="white"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              fill="none"
+            />
+          </>
+        )}
+      </g>
     </svg>
   );
 }
