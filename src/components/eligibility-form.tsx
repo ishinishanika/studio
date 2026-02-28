@@ -92,7 +92,7 @@ export function EligibilityForm() {
 
       {state.status === 'success' && state.result && (
         <Alert variant={state.result.isEligible ? 'success' : 'destructive'}>
-          <div className="flex w-full items-start justify-between gap-4">
+          <div className="flex w-full items-center justify-between gap-4">
             <div className="flex-grow basis-3/4">
               <AlertTitle>
                 {state.result.isEligible ? 'Likely Eligible to Donate' : 'Potential Deferral'}
@@ -113,7 +113,7 @@ export function EligibilityForm() {
       )}
        {state.status === 'error' && (
         <Alert variant="destructive">
-           <div className="flex w-full items-start justify-between gap-4">
+           <div className="flex w-full items-center justify-between gap-4">
             <div className="flex-grow basis-3/4">
               <AlertTitle>Error</AlertTitle>
               <AlertDescription>{state.message}</AlertDescription>
