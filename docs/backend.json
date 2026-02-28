@@ -1,0 +1,604 @@
+{
+  "entities": {
+    "DonorProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "DonorProfile",
+      "type": "object",
+      "description": "Stores personal and donation-related information for a registered blood donor, excluding authentication credentials.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the DonorProfile entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the unique identifier from the external authentication system for this donor. (Relationship: ExternalUser 1:1 DonorProfile)"
+        },
+        "firstName": {
+          "type": "string",
+          "description": "The donor's first name."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "The donor's last name."
+        },
+        "email": {
+          "type": "string",
+          "description": "The donor's email address.",
+          "format": "email"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "The donor's contact phone number."
+        },
+        "addressStreet": {
+          "type": "string",
+          "description": "The street address of the donor."
+        },
+        "addressCity": {
+          "type": "string",
+          "description": "The city of the donor's address."
+        },
+        "addressState": {
+          "type": "string",
+          "description": "The state or province of the donor's address."
+        },
+        "addressZipCode": {
+          "type": "string",
+          "description": "The zip or postal code of the donor's address."
+        },
+        "bloodType": {
+          "type": "string",
+          "description": "The donor's blood type (e.g., 'A+', 'O-')."
+        },
+        "dateOfBirth": {
+          "type": "string",
+          "description": "The donor's date of birth.",
+          "format": "date"
+        },
+        "gender": {
+          "type": "string",
+          "description": "The donor's gender."
+        },
+        "lastDonationDate": {
+          "type": "string",
+          "description": "The date of the donor's most recent blood donation. Null if no donations have been recorded.",
+          "format": "date"
+        },
+        "nextEligibilityDate": {
+          "type": "string",
+          "description": "The calculated date when the donor is next eligible to donate. Null if eligibility cannot be determined.",
+          "format": "date"
+        },
+        "healthConditionsHistory": {
+          "type": "array",
+          "description": "A list of significant past or present health conditions relevant to donation eligibility.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "medications": {
+          "type": "array",
+          "description": "A list of current medications the donor is taking, relevant to donation eligibility.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "travelHistory": {
+          "type": "array",
+          "description": "A list of recent travel history to areas with specific health risks, relevant to donation eligibility.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "firstName",
+        "lastName",
+        "email",
+        "bloodType",
+        "dateOfBirth",
+        "gender"
+      ]
+    },
+    "Hospital": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Hospital",
+      "type": "object",
+      "description": "Represents a hospital or clinic that can create blood donation requests.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Hospital entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The official name of the hospital or clinic."
+        },
+        "contactPerson": {
+          "type": "string",
+          "description": "The name of the primary contact person at the hospital for donation-related inquiries."
+        },
+        "contactEmail": {
+          "type": "string",
+          "description": "The email address for the hospital contact.",
+          "format": "email"
+        },
+        "contactPhone": {
+          "type": "string",
+          "description": "The phone number for the hospital contact."
+        },
+        "addressStreet": {
+          "type": "string",
+          "description": "The street address of the hospital."
+        },
+        "addressCity": {
+          "type": "string",
+          "description": "The city of the hospital's address."
+        },
+        "addressState": {
+          "type": "string",
+          "description": "The state or province of the hospital's address."
+        },
+        "addressZipCode": {
+          "type": "string",
+          "description": "The zip or postal code of the hospital's address."
+        },
+        "latitude": {
+          "type": "number",
+          "description": "The geographical latitude coordinate of the hospital."
+        },
+        "longitude": {
+          "type": "number",
+          "description": "The geographical longitude coordinate of the hospital."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "contactPerson",
+        "contactEmail"
+      ]
+    },
+    "DonationRequest": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "DonationRequest",
+      "type": "object",
+      "description": "Represents an urgent or general request for blood or blood components posted by a hospital or clinic.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the DonationRequest entity."
+        },
+        "hospitalId": {
+          "type": "string",
+          "description": "Reference to the Hospital entity that posted this request. (Relationship: Hospital 1:N DonationRequest)"
+        },
+        "title": {
+          "type": "string",
+          "description": "A brief, descriptive title for the donation request."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the specific blood need or request."
+        },
+        "requestedBloodTypes": {
+          "type": "array",
+          "description": "A list of specific blood types being requested (e.g., ['O-', 'AB+']).",
+          "items": {
+            "type": "string"
+          }
+        },
+        "requestedComponents": {
+          "type": "array",
+          "description": "A list of specific blood components being requested (e.g., ['Whole Blood', 'Platelets', 'Plasma']).",
+          "items": {
+            "type": "string"
+          }
+        },
+        "urgencyLevel": {
+          "type": "string",
+          "description": "The level of urgency for this request (e.g., 'Urgent', 'General', 'Critical')."
+        },
+        "requestDate": {
+          "type": "string",
+          "description": "The date and time when this request was posted.",
+          "format": "date-time"
+        },
+        "dueDate": {
+          "type": "string",
+          "description": "The desired date for the donations to be received. Null if the request is ongoing.",
+          "format": "date"
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "Indicates whether the request is currently active and seeking donations."
+        },
+        "targetQuantity": {
+          "type": "number",
+          "description": "The target number of units or donors needed for this request."
+        },
+        "currentQuantity": {
+          "type": "number",
+          "description": "The number of units or donors collected so far towards this request."
+        }
+      },
+      "required": [
+        "id",
+        "hospitalId",
+        "title",
+        "description",
+        "requestedBloodTypes",
+        "urgencyLevel",
+        "requestDate",
+        "isActive"
+      ]
+    },
+    "DonationDrive": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "DonationDrive",
+      "type": "object",
+      "description": "Represents a scheduled blood donation event or drive, often organized by a specific entity.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the DonationDrive entity."
+        },
+        "organizerName": {
+          "type": "string",
+          "description": "The name of the organization or entity hosting the drive."
+        },
+        "title": {
+          "type": "string",
+          "description": "A descriptive title for the donation drive."
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed information about the donation drive."
+        },
+        "addressStreet": {
+          "type": "string",
+          "description": "The street address of the drive location."
+        },
+        "addressCity": {
+          "type": "string",
+          "description": "The city of the drive location."
+        },
+        "addressState": {
+          "type": "string",
+          "description": "The state or province of the drive location."
+        },
+        "addressZipCode": {
+          "type": "string",
+          "description": "The zip or postal code of the drive location."
+        },
+        "latitude": {
+          "type": "number",
+          "description": "The geographical latitude coordinate of the drive location."
+        },
+        "longitude": {
+          "type": "number",
+          "description": "The geographical longitude coordinate of the drive location."
+        },
+        "startDate": {
+          "type": "string",
+          "description": "The start date and time of the donation drive.",
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "description": "The end date and time of the donation drive.",
+          "format": "date-time"
+        },
+        "targetBloodTypes": {
+          "type": "array",
+          "description": "A list of specific blood types particularly encouraged for this drive.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "contactEmail": {
+          "type": "string",
+          "description": "The email address for inquiries about the drive.",
+          "format": "email"
+        },
+        "contactPhone": {
+          "type": "string",
+          "description": "The phone number for inquiries about the drive."
+        },
+        "isPublished": {
+          "type": "boolean",
+          "description": "Indicates whether the drive is publicly visible to donors."
+        }
+      },
+      "required": [
+        "id",
+        "organizerName",
+        "title",
+        "addressStreet",
+        "addressCity",
+        "startDate",
+        "endDate",
+        "isPublished"
+      ]
+    },
+    "DonationEvent": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "DonationEvent",
+      "type": "object",
+      "description": "Records a specific instance of a blood donation made by a donor.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the DonationEvent entity."
+        },
+        "donorId": {
+          "type": "string",
+          "description": "Reference to the DonorProfile entity who made this donation. (Relationship: DonorProfile 1:N DonationEvent)"
+        },
+        "donationDate": {
+          "type": "string",
+          "description": "The date and time when the donation occurred.",
+          "format": "date-time"
+        },
+        "donatedBloodType": {
+          "type": "string",
+          "description": "The blood type actually donated."
+        },
+        "donatedComponents": {
+          "type": "array",
+          "description": "A list of specific blood components donated (e.g., ['Whole Blood', 'Plasma']).",
+          "items": {
+            "type": "string"
+          }
+        },
+        "locationName": {
+          "type": "string",
+          "description": "The name of the location where the donation took place (e.g., 'City General Hospital', 'Community Blood Drive Center')."
+        },
+        "hospitalId": {
+          "type": "string",
+          "description": "Optional reference to a Hospital entity if the donation occurred at a hospital. (Relationship: Hospital 0..1 DonationEvent)"
+        },
+        "driveId": {
+          "type": "string",
+          "description": "Optional reference to a DonationDrive entity if the donation occurred at a specific drive. (Relationship: DonationDrive 0..1 DonationEvent)"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Any additional notes or remarks about this specific donation event."
+        }
+      },
+      "required": [
+        "id",
+        "donorId",
+        "donationDate",
+        "donatedBloodType",
+        "locationName"
+      ]
+    },
+    "EligibilityAssessment": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "EligibilityAssessment",
+      "type": "object",
+      "description": "Stores the results of an AI-powered assessment of a donor's eligibility for blood donation.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the EligibilityAssessment entity."
+        },
+        "donorId": {
+          "type": "string",
+          "description": "Reference to the DonorProfile entity for whom this assessment was performed. (Relationship: DonorProfile 1:N EligibilityAssessment)"
+        },
+        "assessmentDate": {
+          "type": "string",
+          "description": "The date and time when the eligibility assessment was performed.",
+          "format": "date-time"
+        },
+        "healthInformationInput": {
+          "type": "string",
+          "description": "A summary or structured string representation of the health information provided by the donor for this assessment."
+        },
+        "assessmentResult": {
+          "type": "string",
+          "description": "The outcome of the assessment (e.g., 'Eligible', 'Ineligible', 'RequiresManualReview')."
+        },
+        "reasoning": {
+          "type": "string",
+          "description": "A detailed explanation or justification from the AI tool for the assessment result."
+        },
+        "disclaimer": {
+          "type": "string",
+          "description": "A standard disclaimer indicating that the assessment is informational and not a substitute for professional medical advice."
+        }
+      },
+      "required": [
+        "id",
+        "donorId",
+        "assessmentDate",
+        "assessmentResult",
+        "reasoning"
+      ]
+    },
+    "NotificationPreference": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "NotificationPreference",
+      "type": "object",
+      "description": "Stores a donor's preferences for receiving various types of notifications.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the NotificationPreference entity."
+        },
+        "donorId": {
+          "type": "string",
+          "description": "Reference to the DonorProfile entity to whom these preferences belong. (Relationship: DonorProfile 1:1 NotificationPreference)"
+        },
+        "receiveUrgentRequests": {
+          "type": "boolean",
+          "description": "Indicates whether the donor wishes to be notified of urgent blood requests."
+        },
+        "receiveDriveNotifications": {
+          "type": "boolean",
+          "description": "Indicates whether the donor wishes to be notified of nearby blood donation drives."
+        },
+        "preferredContactMethod": {
+          "type": "string",
+          "description": "The donor's preferred method for receiving notifications (e.g., 'Email', 'SMS', 'InApp')."
+        },
+        "preferredDistanceKm": {
+          "type": "number",
+          "description": "The maximum distance in kilometers for which the donor wishes to receive notifications about 'nearby' opportunities."
+        },
+        "preferredBloodTypes": {
+          "type": "array",
+          "description": "A list of specific blood types the donor is interested in being notified about, in addition to their own.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "donorId",
+        "receiveUrgentRequests",
+        "receiveDriveNotifications",
+        "preferredContactMethod"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}/donorProfile",
+        "definition": {
+          "entityName": "DonorProfile",
+          "schema": {
+            "$ref": "#/backend/entities/DonorProfile"
+          },
+          "description": "Stores personal and donation-related information for a registered blood donor, directly linked to a user's authentication ID. The document ID for this profile is 'donorProfile'. Includes denormalized 'userId' matching the path parameter for authorization independence. Only the authenticated user (`userId`) can read/write their own profile.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the authenticated user, which corresponds to the owner of this donor profile."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/hospitals/{hospitalId}",
+        "definition": {
+          "entityName": "Hospital",
+          "schema": {
+            "$ref": "#/backend/entities/Hospital"
+          },
+          "description": "Stores details for hospitals and clinics. These documents are publicly readable to allow discovery by donors. Write access is restricted to authorized hospital staff (managed via external DBAC collections) for authorization independence.",
+          "params": [
+            {
+              "name": "hospitalId",
+              "description": "The unique identifier for a hospital or clinic."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/donationRequests/{donationRequestId}",
+        "definition": {
+          "entityName": "DonationRequest",
+          "schema": {
+            "$ref": "#/backend/entities/DonationRequest"
+          },
+          "description": "Publicly discoverable requests for blood from hospitals. Documents include denormalized 'hospitalId' (for linking to the creating hospital), 'isActive' (for QAP support), and 'requestedBloodTypes'. Read access is public for active requests; write access is restricted to hospital staff associated with the `hospitalId` stored within the document for authorization independence.",
+          "params": [
+            {
+              "name": "donationRequestId",
+              "description": "The unique identifier for a specific blood donation request."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/donationDrives/{donationDriveId}",
+        "definition": {
+          "entityName": "DonationDrive",
+          "schema": {
+            "$ref": "#/backend/entities/DonationDrive"
+          },
+          "description": "Publicly discoverable blood donation events or drives. Documents include denormalized 'isPublished', 'startDate', and 'endDate' for authorization independence and QAP support. Read access is public for published and active drives; write access is restricted to authorized organizers.",
+          "params": [
+            {
+              "name": "donationDriveId",
+              "description": "The unique identifier for a specific blood donation drive event."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/donationEvents/{donationEventId}",
+        "definition": {
+          "entityName": "DonationEvent",
+          "schema": {
+            "$ref": "#/backend/entities/DonationEvent"
+          },
+          "description": "Records a specific blood donation instance for a donor. This is private data accessible only by the owning user. Documents include denormalized 'donorId' matching the path parameter for authorization independence. The `userId` path parameter must match `request.auth.uid`.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the authenticated user, which corresponds to the donor who made this donation."
+            },
+            {
+              "name": "donationEventId",
+              "description": "The unique identifier for a specific donation event made by the donor."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/eligibilityAssessments/{assessmentId}",
+        "definition": {
+          "entityName": "EligibilityAssessment",
+          "schema": {
+            "$ref": "#/backend/entities/EligibilityAssessment"
+          },
+          "description": "Stores AI-powered eligibility assessment results for a donor. This is private data accessible only by the owning user. Documents include denormalized 'donorId' matching the path parameter for authorization independence. The `userId` path parameter must match `request.auth.uid`.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the authenticated user, which corresponds to the donor whose eligibility was assessed."
+            },
+            {
+              "name": "assessmentId",
+              "description": "The unique identifier for a specific eligibility assessment record."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/notificationPreferences",
+        "definition": {
+          "entityName": "NotificationPreference",
+          "schema": {
+            "$ref": "#/backend/entities/NotificationPreference"
+          },
+          "description": "Stores a donor's notification preferences. This is private data accessible only by the owning user. The document ID for this preference is 'notificationPreferences'. Includes denormalized 'donorId' matching the path parameter for authorization independence. The `userId` path parameter must match `request.auth.uid`.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the authenticated user, which corresponds to the owner of these notification preferences."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure for LifeFlow Connect prioritizes security, scalability, and debuggability by strictly adhering to the core design principles. The primary strategy employed is **Authorization Independence via Denormalization** (Strategy A) and **Structural Segregation** (Strategy B), ensuring that security rules are simple, robust, and atomic.\n\n**Authorization Independence (CRITICAL) and Denormalization:**\n*   For user-specific subcollections like `/users/{userId}/donorProfile`, `/users/{userId}/donationEvents`, `/users/{userId}/eligibilityAssessments`, and `/users/{userId}/notificationPreferences`, authorization relies on the path parameter `{userId}` matching `request.auth.uid`. To guarantee Authorization Independence, the corresponding documents (e.g., `DonorProfile`, `DonationEvent`) explicitly include a `userId` or `donorId` field, which *must* match the `{userId}` in the path. This eliminates the need for `get()` calls to a parent `user` document for authorization, making rules atomic and easier to debug.\n*   For collaborative or publicly viewable collections like `/donationRequests` and `/donationDrives`, critical authorization and visibility fields (`hospitalId`, `isActive`, `isPublished`, `startDate`, `endDate`) are denormalized directly into each document. This means security rules can evaluate access without fetching related parent documents (e.g., checking if a `DonationRequest`'s `hospitalId` is associated with an authenticated hospital admin is done by checking the `hospitalId` field *within* the `DonationRequest` document itself against an external roles collection, not by `get()`-ing the Hospital document). This is crucial for enabling atomic operations.\n\n**Structural Segregation (Homogeneous Security Posture):**\n*   Data with different access requirements is stored in separate collections. For instance, `/donationRequests` and `/donationDrives` are top-level collections because they need to be publicly listable. All documents within these collections share the same read security posture (public for active/published items, with specific write access).\n*   Private user data, such as `DonorProfile`, `DonationEvent`, `EligibilityAssessment`, and `NotificationPreference`, are all placed under `/users/{userId}/...` subcollections. This naturally segregates private data, where the `{userId}` path wildcard grants implicit ownership and restricts access to the authenticated user.\n\n**QAPs (Rules are not Filters):**\n*   The structure directly supports secure `list` operations by making crucial filtering attributes part of the document data itself (denormalization). For example:\n    *   `/donationRequests`: Donors can query and list `DonationRequest` documents. Security rules will ensure that only documents where `isActive` is `true` are returned, preventing exposure of draft or inactive requests. The query would include `where('isActive', '==', true)`.\n    *   `/donationDrives`: Donors can list `DonationDrive` documents. Rules will restrict results to documents where `isPublished` is `true` and potentially `endDate` is in the future. The query would include `where('isPublished', '==', true)`.\n    *   `/users/{userId}/donationEvents` and `/users/{userId}/eligibilityAssessments`: These are user-owned subcollections. `list` operations are implicitly secure as they are confined to the `userId` in the path, which `request.auth.uid` must match.\n\n**DBAC (No Custom Claims):**\n*   Roles are stored in the database. For `Hospital` write access and `DonationRequest` creation/management, dedicated collections like `/roles_hospitalAdmins/{hospitalId}_{userId}` (conceptually, not explicitly listed in `firestorePaths` as schema not provided) would be used. The *existence* of a document at such a path would grant `userId` admin rights for `hospitalId`, enabling rules like `allow write: if exists(/databases/$(database)/documents/roles_hospitalAdmins/$(resource.data.hospitalId)_$(request.auth.uid))`. A similar pattern would apply for global administrators.\n\nThis design ensures that each document's security context is either self-contained or verifiable via direct DBAC checks, avoiding costly and insecure `get()` operations in rules and promoting predictable access patterns."
+  }
+}

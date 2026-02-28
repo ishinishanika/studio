@@ -1,0 +1,197 @@
+/**
+ * Core Philosophy: This ruleset enforces a strict security model based on data segregation.
+ * It separates private user data, which is governed by an ownership model, from public data,
+ * which is broadly readable but has highly restricted write access. The design prioritizes
+ * simple, performant, and atomic authorization checks.
+ *
+ * Data Structure:
+ * - Private user data (profiles, donation history, etc.) is nested within a user-specific
+ *   path: /users/{userId}/... Access is granted by matching the authenticated user's ID
+ *   against the {userId} wildcard.
+ * - Publicly discoverable data (hospitals, donation requests, blood drives) is stored in
+ *   top-level collections, allowing for global read access by all users.
+ *
+ * Key Security Decisions:
+ * - User Data Privacy: A user can only ever access documents under their own /users/{userId} path.
+ *   There is no mechanism for one user to view another user's private information.
+ * - Public Read, Restricted Write: Top-level collections like /hospitals, /donationRequests,
+ *   and /donationDrives are world-readable to allow donors to find information. However,
+ *   write operations are disabled by default, pending implementation of a formal role-based
+ *   access control system (e.g., for hospital staff or event organizers).
+ * - No User Listing: The data structure does not include a top-level /users collection,
+ *   inherently preventing the listing of all application users.
+ *
+ * Denormalization for Authorization:
+ * To ensure security rules are fast and simple, authorization data is denormalized. For
+ * example, documents within a user's private subcollection (e.g., a DonationEvent) contain
+ * a 'donorId' field that must match the {userId} in the path. This validates relational
+ * integrity on creation and prevents costly `get()` calls in rules.
+ *
+ * Structural Segregation:
+ * The ruleset leverages separate collections for data with different security needs. All
+ * private user data is grouped under the `/users` path, creating a secure boundary. All
+ * public data resides in separate top-level collections, allowing for simple, open read rules
+ * without compromising the security of private data.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions for improved readability and reusability.
+
+    /**
+     * Checks if a user is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * Checks if the currently authenticated user's UID matches the provided userId.
+     * This is the foundation of the user-ownership model.
+     * @param userId The user ID to check against the authenticated user.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /**
+     * Checks for ownership on an existing document.
+     * CRITICAL: Used for all update and delete operations to prevent acting on non-existent data.
+     * @param userId The user ID to check for ownership.
+     */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+
+    /**
+     * Validates that the 'userId' field in a new DonorProfile document matches the user's path.
+     * This enforces relational integrity at creation time.
+     */
+    function hasValidDonorProfileData(userId) {
+      return request.resource.data.userId == userId;
+    }
+
+    /**
+     * Validates that the 'donorId' field in new documents matches the user's path.
+     * This enforces relational integrity for various user-specific records.
+     */
+    function hasValidDonorData(userId) {
+      return request.resource.data.donorId == userId;
+    }
+
+    /**
+     * Enforces immutability of the 'userId' field on update.
+     * Prevents re-assigning a document to a different user.
+     */
+    function isUserIdImmutable() {
+      return request.resource.data.userId == resource.data.userId;
+    }
+
+    /**
+     * Enforces immutability of the 'donorId' field on update.
+     * Prevents re-assigning a document to a different user.
+     */
+    function isDonorIdImmutable() {
+      return request.resource.data.donorId == resource.data.donorId;
+    }
+
+    /**
+     * @description Controls access to a user's private donor profile.
+     * @path /users/{userId}/donorProfile/{profileId}
+     * @allow (create) An authenticated user creating their own profile document.
+     * @deny (get) Another authenticated user trying to read someone else's profile.
+     * @principle Restricts access to a user's own data tree and validates relational integrity.
+     */
+    match /users/{userId}/donorProfile/{profileId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && hasValidDonorProfileData(userId);
+      allow update: if isExistingOwner(userId) && isUserIdImmutable();
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Controls access to a user's private donation history.
+     * @path /users/{userId}/donationEvents/{donationEventId}
+     * @allow (list) An authenticated user listing their own past donations.
+     * @deny (update) Another user trying to modify someone else's donation record.
+     * @principle Restricts access to a user's own data tree and validates relational integrity.
+     */
+    match /users/{userId}/donationEvents/{donationEventId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && hasValidDonorData(userId);
+      allow update: if isExistingOwner(userId) && isDonorIdImmutable();
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Controls access to a user's private eligibility assessment records.
+     * @path /users/{userId}/eligibilityAssessments/{assessmentId}
+     * @allow (get) An authenticated user reading their own assessment result.
+     * @deny (create) An unauthenticated user trying to create an assessment record.
+     * @principle Restricts access to a user's own data tree and validates relational integrity.
+     */
+    match /users/{userId}/eligibilityAssessments/{assessmentId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && hasValidDonorData(userId);
+      allow update: if isExistingOwner(userId) && isDonorIdImmutable();
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Controls access to a user's private notification preferences.
+     * @path /users/{userId}/notificationPreferences/{prefsId}
+     * @allow (update) An authenticated user updating their own notification settings.
+     * @deny (delete) Another user trying to delete someone else's preferences.
+     * @principle Restricts access to a user's own data tree and validates relational integrity.
+     */
+    match /users/{userId}/notificationPreferences/{prefsId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && hasValidDonorData(userId);
+      allow update: if isExistingOwner(userId) && isDonorIdImmutable();
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Controls access to public hospital information.
+     * @path /hospitals/{hospitalId}
+     * @allow (get) Any user, including unauthenticated ones, reading hospital details.
+     * @deny (create) Any user trying to add a new hospital.
+     * @principle Allows public read access for discovery but restricts writes pending a role system.
+     */
+    match /hospitals/{hospitalId} {
+      allow get, list: if true;
+      // CRITICAL: Cannot implement role-based writes. The IR mentions DBAC for hospital staff
+      // but does not define the roles collection. Writes are disabled for security.
+      allow create, update, delete: if false; // TODO: Implement DBAC for hospital staff once the roles schema is defined.
+    }
+
+    /**
+     * @description Controls access to public blood donation requests.
+     * @path /donationRequests/{donationRequestId}
+     * @allow (list) Any user, including unauthenticated ones, listing active donation requests.
+     * @deny (update) Any user trying to modify an existing request.
+     * @principle Allows public read access for discovery but restricts writes pending a role system.
+     */
+    match /donationRequests/{donationRequestId} {
+      allow get, list: if true;
+      // CRITICAL: Cannot implement role-based writes. The IR mentions DBAC for hospital staff
+      // associated with the `hospitalId` on this document, but does not define the roles collection.
+      allow create, update, delete: if false; // TODO: Implement DBAC check against `resource.data.hospitalId` for hospital staff.
+    }
+
+    /**
+     * @description Controls access to public blood donation drives.
+     * @path /donationDrives/{donationDriveId}
+     * @allow (get) Any user, including unauthenticated ones, viewing details of a blood drive.
+     * @deny (create) Any user trying to create a new donation drive event.
+     * @principle Allows public read access but restricts writes due to missing ownership data.
+     */
+    match /donationDrives/{donationDriveId} {
+      allow get, list: if true;
+      // CRITICAL: Cannot implement owner-only writes. The 'DonationDrive' entity is missing
+      // an 'organizerId' or 'creatorId' field to link it to an authenticated user for authorization.
+      allow create, update, delete: if false; // TODO: Add owner validation once the schema is updated with an ownership field.
+    }
+  }
+}
