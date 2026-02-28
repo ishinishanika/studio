@@ -18,7 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useCollection, useFirestore, useMemoFirebase, useUser } from "@/firebase";
+import { useCollection, useDoc, useFirestore, useMemoFirebase, useUser } from "@/firebase";
 import { collection, doc } from "firebase/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -26,12 +26,11 @@ export default function ProfilePage() {
   const { user } = useUser();
   const firestore = useFirestore();
 
-  const profileCollectionQuery = useMemoFirebase(
-    () => (user ? collection(firestore, "users", user.uid, "donorProfile") : null),
+  const profileDocRef = useMemoFirebase(
+    () => (user ? doc(firestore, "users", user.uid, "donorProfile", user.uid) : null),
     [user, firestore]
   );
-  const { data: profiles, isLoading: isProfileLoading } = useCollection(profileCollectionQuery);
-  const profile = profiles?.[0];
+  const { data: profile, isLoading: isProfileLoading } = useDoc(profileDocRef);
 
   const donationHistoryQuery = useMemoFirebase(
     () => (user ? collection(firestore, "users", user.uid, "donationEvents") : null),
@@ -145,5 +144,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-    

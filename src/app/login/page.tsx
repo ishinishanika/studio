@@ -1,9 +1,10 @@
 
 'use client';
-import React, { useEffect, useActionState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AlertCircle, Loader2 } from "lucide-react";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,8 +18,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { signInAction } from "@/app/actions";
 import { LifeFlowLogo } from "@/components/icons";
+import { useAuth } from "@/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+
+const SignInSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
+});
 
 const initialState = {
   status: "idle" as const,
@@ -26,14 +33,43 @@ const initialState = {
 };
 
 export default function LoginPage() {
-  const [state, formAction] = useActionState(signInAction, initialState);
+  const [state, setState] = useState(initialState);
   const router = useRouter();
+  const auth = useAuth();
 
   useEffect(() => {
     if (state.status === "success") {
       router.replace("/dashboard");
     }
   }, [state.status, router]);
+  
+  const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setState({ status: 'loading', message: '' });
+    const formData = new FormData(e.currentTarget);
+    const validatedFields = SignInSchema.safeParse(Object.fromEntries(formData));
+
+    if (!validatedFields.success) {
+      setState({
+        status: "error",
+        message: validatedFields.error.errors.map(e => e.message).join(', '),
+      });
+      return;
+    }
+
+    const { email, password } = validatedFields.data;
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      setState({ status: "success", message: "Login successful! Redirecting..." });
+    } catch (error: any) {
+      let message = "Invalid email or password.";
+      if (error.code === 'auth/invalid-credential') {
+        message = "Invalid email or password.";
+      }
+      setState({ status: "error", message });
+    }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
@@ -47,7 +83,7 @@ export default function LoginPage() {
           </Link>
         </div>
         <Card>
-          <form action={formAction}>
+          <form onSubmit={handleSignIn}>
             <CardHeader className="text-center">
               <CardTitle>Welcome Back</CardTitle>
               <CardDescription>
