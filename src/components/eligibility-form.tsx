@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -51,7 +51,7 @@ function SubmitButton() {
 }
 
 export function EligibilityForm() {
-  const [state, formAction] = useActionState(checkEligibilityAction, initialFormState);
+  const [state, formAction] = React.useActionState(checkEligibilityAction, initialFormState);
   
   const form = useForm<EligibilityFormValues>({
     resolver: zodResolver(formSchema),
