@@ -1,8 +1,7 @@
 
 'use client';
-import React, { useEffect } from "react";
+import React, { useEffect, useActionState } from "react";
 import Link from "next/link";
-import { useFormState } from "react-dom";
 import { useRouter } from "next/navigation";
 import { AlertCircle, Loader2 } from "lucide-react";
 
@@ -27,7 +26,7 @@ const initialState = {
 };
 
 export default function RegisterPage() {
-  const [state, formAction] = useFormState(signUpAction, initialState);
+  const [state, formAction] = useActionState(signUpAction, initialState);
   const router = useRouter();
 
   useEffect(() => {
@@ -100,5 +99,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-
-    
