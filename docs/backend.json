@@ -6,10 +6,6 @@
       "type": "object",
       "description": "Stores personal and donation-related information for a registered blood donor, excluding authentication credentials.",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the DonorProfile entity."
-        },
         "userId": {
           "type": "string",
           "description": "Reference to the unique identifier from the external authentication system for this donor. (Relationship: ExternalUser 1:1 DonorProfile)"
@@ -93,14 +89,10 @@
         }
       },
       "required": [
-        "id",
         "userId",
-        "firstName",
-        "lastName",
         "email",
-        "bloodType",
-        "dateOfBirth",
-        "gender"
+        "firstName",
+        "lastName"
       ]
     },
     "Hospital": {
@@ -602,3 +594,5 @@
     "reasoning": "The Firestore structure for LifeFlow Connect prioritizes security, scalability, and debuggability by strictly adhering to the core design principles. The primary strategy employed is **Authorization Independence via Denormalization** (Strategy A) and **Structural Segregation** (Strategy B), ensuring that security rules are simple, robust, and atomic.\n\n**Authorization Independence (CRITICAL) and Denormalization:**\n*   For user-specific subcollections like `/users/{userId}/donorProfile`, `/users/{userId}/donationEvents`, `/users/{userId}/eligibilityAssessments`, and `/users/{userId}/notificationPreferences`, authorization relies on the path parameter `{userId}` matching `request.auth.uid`. To guarantee Authorization Independence, the corresponding documents (e.g., `DonorProfile`, `DonationEvent`) explicitly include a `userId` or `donorId` field, which *must* match the `{userId}` in the path. This eliminates the need for `get()` calls to a parent `user` document for authorization, making rules atomic and easier to debug.\n*   For collaborative or publicly viewable collections like `/donationRequests` and `/donationDrives`, critical authorization and visibility fields (`hospitalId`, `isActive`, `isPublished`, `startDate`, `endDate`) are denormalized directly into each document. This means security rules can evaluate access without fetching related parent documents (e.g., checking if a `DonationRequest`'s `hospitalId` is associated with an authenticated hospital admin is done by checking the `hospitalId` field *within* the `DonationRequest` document itself against an external roles collection, not by `get()`-ing the Hospital document). This is crucial for enabling atomic operations.\n\n**Structural Segregation (Homogeneous Security Posture):**\n*   Data with different access requirements is stored in separate collections. For instance, `/donationRequests` and `/donationDrives` are top-level collections because they need to be publicly listable. All documents within these collections share the same read security posture (public for active/published items, with specific write access).\n*   Private user data, such as `DonorProfile`, `DonationEvent`, `EligibilityAssessment`, and `NotificationPreference`, are all placed under `/users/{userId}/...` subcollections. This naturally segregates private data, where the `{userId}` path wildcard grants implicit ownership and restricts access to the authenticated user.\n\n**QAPs (Rules are not Filters):**\n*   The structure directly supports secure `list` operations by making crucial filtering attributes part of the document data itself (denormalization). For example:\n    *   `/donationRequests`: Donors can query and list `DonationRequest` documents. Security rules will ensure that only documents where `isActive` is `true` are returned, preventing exposure of draft or inactive requests. The query would include `where('isActive', '==', true)`.\n    *   `/donationDrives`: Donors can list `DonationDrive` documents. Rules will restrict results to documents where `isPublished` is `true` and potentially `endDate` is in the future. The query would include `where('isPublished', '==', true)`.\n    *   `/users/{userId}/donationEvents` and `/users/{userId}/eligibilityAssessments`: These are user-owned subcollections. `list` operations are implicitly secure as they are confined to the `userId` in the path, which `request.auth.uid` must match.\n\n**DBAC (No Custom Claims):**\n*   Roles are stored in the database. For `Hospital` write access and `DonationRequest` creation/management, dedicated collections like `/roles_hospitalAdmins/{hospitalId}_{userId}` (conceptually, not explicitly listed in `firestorePaths` as schema not provided) would be used. The *existence* of a document at such a path would grant `userId` admin rights for `hospitalId`, enabling rules like `allow write: if exists(/databases/$(database)/documents/roles_hospitalAdmins/$(resource.data.hospitalId)_$(request.auth.uid))`. A similar pattern would apply for global administrators.\n\nThis design ensures that each document's security context is either self-contained or verifiable via direct DBAC checks, avoiding costly and insecure `get()` operations in rules and promoting predictable access patterns."
   }
 }
+
+    

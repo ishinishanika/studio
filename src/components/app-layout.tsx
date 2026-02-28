@@ -1,7 +1,8 @@
+
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Avatar,
   AvatarFallback,
@@ -38,7 +39,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { LifeFlowLogo } from "@/components/icons";
-import { mockUser } from "@/lib/data";
+import { useAuth, useUser } from "@/firebase";
 
 type AppLayoutProps = {
   children: React.ReactNode;
@@ -53,10 +54,18 @@ const navItems = [
 
 export function AppLayout({ children }: AppLayoutProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const auth = useAuth();
+  const { user } = useUser();
 
   const getPageTitle = () => {
     const currentItem = navItems.find((item) => pathname.startsWith(item.href));
     return currentItem?.label || "LifeFlow Connect";
+  }
+
+  const handleLogout = async () => {
+    await auth.signOut();
+    router.push('/login');
   }
 
   return (
@@ -132,10 +141,10 @@ export function AppLayout({ children }: AppLayoutProps) {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center gap-2 focus-visible:ring-0">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={mockUser.avatarUrl} alt={mockUser.name} data-ai-hint="person smiling" />
-                    <AvatarFallback>{mockUser.name.charAt(0)}</AvatarFallback>
+                    <AvatarImage src={user?.photoURL || undefined} alt={user?.displayName || ''} data-ai-hint="person smiling" />
+                    <AvatarFallback>{user?.email?.charAt(0).toUpperCase()}</AvatarFallback>
                   </Avatar>
-                  <span className="hidden sm:inline">{mockUser.name}</span>
+                  <span className="hidden sm:inline">{user?.displayName || user?.email}</span>
                   <ChevronDown className="h-4 w-4 hidden sm:inline" />
                 </Button>
               </DropdownMenuTrigger>
@@ -149,7 +158,7 @@ export function AppLayout({ children }: AppLayoutProps) {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
                 </DropdownMenuItem>
@@ -162,3 +171,5 @@ export function AppLayout({ children }: AppLayoutProps) {
     </SidebarProvider>
   );
 }
+
+    

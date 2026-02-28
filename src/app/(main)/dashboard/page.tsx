@@ -1,3 +1,6 @@
+
+'use client';
+
 import Link from "next/link";
 import { format } from "date-fns";
 import { AlertTriangle, ArrowRight, CalendarClock, HeartPulse } from "lucide-react";
@@ -12,16 +15,20 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { getNextDonationDate, mockDonationRequests, mockUser } from "@/lib/data";
+import { getNextDonationDate, mockDonationRequests } from "@/lib/data";
+import { useUser } from "@/firebase";
 
 export default function DashboardPage() {
-  const nextDonationDate = getNextDonationDate(mockUser.lastDonation);
+  const { user } = useUser();
+  // TODO: Replace mockUser with real user data from Firestore
+  const lastDonation = new Date(); // placeholder
+  const nextDonationDate = getNextDonationDate(lastDonation);
   const urgentRequests = mockDonationRequests.filter(req => req.urgency === "Urgent" || req.urgency === "High").slice(0, 3);
 
   return (
     <div className="flex flex-col gap-6">
       <div className="space-y-0.5">
-        <h2 className="text-2xl font-bold tracking-tight">Welcome back, {mockUser.name}!</h2>
+        <h2 className="text-2xl font-bold tracking-tight">Welcome back, {user?.displayName || 'Donor'}!</h2>
         <p className="text-muted-foreground">
           Here's a summary of your donation status and opportunities.
         </p>
@@ -102,3 +109,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+    
