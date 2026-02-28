@@ -37,7 +37,7 @@ export default function DonationsPage() {
       );
     }
 
-    if (bloodTypeFilter) {
+    if (bloodTypeFilter && bloodTypeFilter !== 'all') {
       requests = requests.filter((req) => req.bloodType === bloodTypeFilter);
     }
 
@@ -65,7 +65,7 @@ export default function DonationsPage() {
                 <SelectValue placeholder="Select Blood Type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Blood Types</SelectItem>
+                <SelectItem value="all">All Blood Types</SelectItem>
                 {bloodTypes.map((type) => (
                   <SelectItem key={type} value={type}>
                     {type}
