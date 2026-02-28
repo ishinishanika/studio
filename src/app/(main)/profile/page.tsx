@@ -31,11 +31,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { EditProfileForm } from "@/components/profile-edit-form";
+import { PlusCircle } from "lucide-react";
+import { AddDonationForm } from "@/components/add-donation-form";
 
 export default function ProfilePage() {
   const { user } = useUser();
   const firestore = useFirestore();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   const profileDocRef = useMemoFirebase(
     () => (user ? doc(firestore, "users", user.uid, "donorProfile", user.uid) : null),
@@ -137,10 +140,28 @@ export default function ProfilePage() {
       
       <Card>
         <CardHeader>
-          <CardTitle>Donation History</CardTitle>
-          <CardDescription>
-            A record of your life-saving contributions.
-          </CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Donation History</CardTitle>
+              <CardDescription>
+                A record of your life-saving contributions.
+              </CardDescription>
+            </div>
+            <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline"><PlusCircle className="mr-2 h-4 w-4" /> Add Donation</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Add Donation Record</DialogTitle>
+                  <DialogDescription>
+                    Log a new donation to keep your history up to date.
+                  </DialogDescription>
+                </DialogHeader>
+                <AddDonationForm onSave={() => setIsAddDialogOpen(false)} />
+              </DialogContent>
+            </Dialog>
+          </div>
         </CardHeader>
         <CardContent>
           <Table>
@@ -155,7 +176,7 @@ export default function ProfilePage() {
               {donationHistory?.map((donation: any) => (
                 <TableRow key={donation.id}>
                   <TableCell className="font-medium">
-                    {format(new Date(donation.donationDate), "PPP")}
+                    {donation.donationDate ? format(new Date(donation.donationDate), "PPP") : 'N/A'}
                   </TableCell>
                   <TableCell>{donation.locationName}</TableCell>
                   <TableCell>{donation.donatedComponents.join(', ')}</TableCell>
