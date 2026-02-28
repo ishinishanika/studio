@@ -1,4 +1,5 @@
 'use client';
+import { useState } from "react";
 import { format } from "date-fns";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -21,10 +22,20 @@ import {
 import { useCollection, useDoc, useFirestore, useMemoFirebase, useUser } from "@/firebase";
 import { collection, doc } from "firebase/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { EditProfileForm } from "@/components/profile-edit-form";
 
 export default function ProfilePage() {
   const { user } = useUser();
   const firestore = useFirestore();
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const profileDocRef = useMemoFirebase(
     () => (user ? doc(firestore, "users", user.uid, "donorProfile", user.uid) : null),
@@ -107,7 +118,20 @@ export default function ProfilePage() {
               </div>
             </div>
           </div>
-          <Button variant="outline">Edit Profile</Button>
+          <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline">Edit Profile</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Edit Profile</DialogTitle>
+                <DialogDescription>
+                  Make changes to your profile here. Click save when you're done.
+                </DialogDescription>
+              </DialogHeader>
+              {profile && <EditProfileForm profile={profile} onSave={() => setIsEditDialogOpen(false)} />}
+            </DialogContent>
+          </Dialog>
         </CardHeader>
       </Card>
       
