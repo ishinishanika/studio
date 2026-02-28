@@ -159,7 +159,7 @@ export function EligibilityForm() {
       </Card>
 
       {state.status === "success" && state.result && (
-        <Alert variant={state.result.isEligible ? "default" : "destructive"} className="bg-card">
+        <Alert variant={state.result.isEligible ? "success" : "destructive"}>
            {state.result.isEligible ? <CheckCircle className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
           <AlertTitle>
             {state.result.isEligible ? "Likely Eligible to Donate" : "Potential Deferral"}
