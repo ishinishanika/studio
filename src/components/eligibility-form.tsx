@@ -2,7 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { useFormStatus } from "react-dom";
+import { useFormStatus, useActionState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -24,8 +24,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { checkEligibilityAction, type EligibilityFormState } from "@/app/actions";
 
 const formSchema = z.object({
-  age: z.coerce.number().int().min(16, "Must be at least 16").max(99, "Must be under 100"),
-  weightKg: z.coerce.number().min(45, "Must be at least 45 kg").max(200, "Must be under 200 kg"),
+  age: z.coerce.number().int().min(20, "Must be at least 20").max(99, "Must be under 100"),
+  weightKg: z.coerce.number().min(60, "Must be at least 60 kg").max(200, "Must be under 200 kg"),
   hasTattooOrPiercingInLast6Months: z.boolean().default(false),
   traveledToMalariaRiskAreaInLastYear: z.boolean().default(false),
   hasFeverOrFluSymptomsToday: z.boolean().default(false),
@@ -58,12 +58,12 @@ function SubmitButton() {
 }
 
 export function EligibilityForm() {
-  const [state, formAction] = React.useActionState(checkEligibilityAction, initialFormState);
+  const [state, formAction] = useActionState(checkEligibilityAction, initialFormState);
   
   const form = useForm<EligibilityFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      age: 18,
+      age: 20,
       weightKg: 70,
       hasTattooOrPiercingInLast6Months: false,
       traveledToMalariaRiskAreaInLastYear: false,
@@ -113,7 +113,7 @@ export function EligibilityForm() {
                       <FormControl>
                         <Input type="number" placeholder="e.g., 25" {...field} />
                       </FormControl>
-                      <FormDescription>Minimum age is 16.</FormDescription>
+                      <FormDescription>Minimum age is 20.</FormDescription>
                     </FormItem>
                   )}
                 />
@@ -126,7 +126,7 @@ export function EligibilityForm() {
                       <FormControl>
                         <Input type="number" placeholder="e.g., 70" {...field} />
                       </FormControl>
-                      <FormDescription>Minimum weight is 45 kg.</FormDescription>
+                      <FormDescription>Minimum weight is 60 kg.</FormDescription>
                     </FormItem>
                   )}
                 />

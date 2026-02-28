@@ -11,8 +11,8 @@ import {
 // --- Eligibility Checker Action ---
 
 const AiEligibilityCheckerInputSchema = z.object({
-  age: z.coerce.number().int().min(16).max(99),
-  weightKg: z.coerce.number().min(45).max(200),
+  age: z.coerce.number().int().min(20).max(99),
+  weightKg: z.coerce.number().min(60).max(200),
   hasTattooOrPiercingInLast6Months: z.boolean(),
   traveledToMalariaRiskAreaInLastYear: z.boolean(),
   hasFeverOrFluSymptomsToday: z.boolean(),

@@ -12,8 +12,8 @@ import {z} from 'genkit';
 
 // Input Schema
 const AiEligibilityCheckerInputSchema = z.object({
-  age: z.number().int().min(16).max(99).describe('Donor\'s age in years. Must be between 16 and 99.'),
-  weightKg: z.number().min(45).max(200).describe('Donor\'s weight in kilograms. Must be between 45 kg and 200 kg.'),
+  age: z.number().int().min(20).max(99).describe('Donor\'s age in years. Must be between 20 and 99.'),
+  weightKg: z.number().min(60).max(200).describe('Donor\'s weight in kilograms. Must be between 60 kg and 200 kg.'),
   hasTattooOrPiercingInLast6Months: z.boolean().describe('True if the donor has received a tattoo or piercing in the last 6 months.'),
   traveledToMalariaRiskAreaInLastYear: z.boolean().describe('True if the donor has traveled to a malaria-risk area in the last 12 months.'),
   hasFeverOrFluSymptomsToday: z.boolean().describe('True if the donor has fever, flu-like symptoms, or any acute illness today.'),
@@ -56,8 +56,8 @@ Has a chronic disease (e.g., heart disease, diabetes requiring insulin, autoimmu
 Has received a blood transfusion in the last 12 months: {{#if hasReceivedBloodTransfusionInLastYear}}Yes{{else}}No{{/if}}
 
 Based on general guidelines, an eligible donor typically:
-- Is at least 16-17 years old (depending on local regulations, but generally older than 16).
-- Weighs at least 50 kg (110 lbs).
+- Is at least 20 years old.
+- Weighs at least 60 kg (around 132 lbs).
 - Has not received a tattoo or piercing in the last 6-12 months.
 - Has not traveled to certain malaria-risk areas in the last 12 months.
 - Is free from fever, flu, and acute illnesses.
@@ -67,7 +67,7 @@ Based on general guidelines, an eligible donor typically:
 
 Provide an 'isEligible' boolean (true for likely eligible, false for likely ineligible/deferred) and a 'reasons' string explaining the assessment. The 'reasons' field should clearly state if the person appears eligible, or explain why they might be ineligible or deferred, always reminding them that this is an informational assessment and a medical professional will make the final decision.
 Focus on identifying factors that would immediately make them ineligible or defer them. If multiple factors are present, list them all. If no obvious disqualifying factors are present, state they appear eligible but still need professional screening.
-If age is less than 16, or weight is less than 45kg, they are generally ineligible.
+If age is less than 20, or weight is less than 60kg, they are generally ineligible.
 `
 });
 
