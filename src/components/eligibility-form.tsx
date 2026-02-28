@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useFormStatus } from "react-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -40,11 +41,15 @@ const initialFormState = {
 };
 
 function SubmitButton() {
-  // useFormStatus is not available with useActionState in this configuration.
-  // We'll rely on the form state for loading indication.
+  const { pending } = useFormStatus();
+
   return (
-    <Button type="submit">
-      <Sparkles className="mr-2" />
+    <Button type="submit" disabled={pending}>
+      {pending ? (
+        <Loader2 className="mr-2 animate-spin" />
+      ) : (
+        <Sparkles className="mr-2" />
+      )}
       Check Eligibility
     </Button>
   );
@@ -147,10 +152,7 @@ export function EligibilityForm() {
                   />
                 ))}
               </div>
-              <Button type="submit" disabled={state.status === 'loading'}>
-                {state.status === 'loading' ? <Loader2 className="mr-2 animate-spin" /> : <Sparkles className="mr-2" />}
-                Check Eligibility
-              </Button>
+              <SubmitButton />
             </form>
           </Form>
         </CardContent>
