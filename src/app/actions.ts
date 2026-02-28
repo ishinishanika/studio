@@ -21,7 +21,7 @@ const AiEligibilityCheckerInputSchema = z.object({
   hasReceivedBloodTransfusionInLastYear: z.boolean(),
 });
 
-type EligibilityFormState = {
+export type EligibilityFormState = {
   status: "idle" | "loading" | "success" | "error";
   message: string;
   result?: AiEligibilityCheckerOutput;

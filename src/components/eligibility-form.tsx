@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -20,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { checkEligibilityAction } from "@/app/actions";
+import { checkEligibilityAction, type EligibilityFormState } from "@/app/actions";
 
 const formSchema = z.object({
   age: z.coerce.number().int().min(16, "Must be at least 16").max(99, "Must be under 100"),
@@ -35,9 +36,10 @@ const formSchema = z.object({
 
 type EligibilityFormValues = z.infer<typeof formSchema>;
 
-const initialFormState = {
-  status: "idle" as const,
+const initialFormState: EligibilityFormState = {
+  status: "idle",
   message: "",
+  result: undefined,
 };
 
 function SubmitButton() {
