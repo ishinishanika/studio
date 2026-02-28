@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -40,7 +40,7 @@ const initialFormState = {
 };
 
 function SubmitButton() {
-  // useFormStatus is not available with useFormState in this configuration.
+  // useFormStatus is not available with useActionState in this configuration.
   // We'll rely on the form state for loading indication.
   return (
     <Button type="submit">
@@ -51,7 +51,7 @@ function SubmitButton() {
 }
 
 export function EligibilityForm() {
-  const [state, formAction] = useFormState(checkEligibilityAction, initialFormState);
+  const [state, formAction] = useActionState(checkEligibilityAction, initialFormState);
   
   const form = useForm<EligibilityFormValues>({
     resolver: zodResolver(formSchema),
