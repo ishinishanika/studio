@@ -1,10 +1,9 @@
-
 'use client';
 
 import * as React from 'react';
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
-import { AlertCircle, CheckCircle, Loader2, Sparkles } from 'lucide-react';
+import { Loader2, Sparkles } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -13,6 +12,7 @@ import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { checkEligibilityAction, type EligibilityFormState } from '@/app/actions';
+import { BloodDropEmotionIcon } from './icons';
 
 const initialFormState: EligibilityFormState = {
   status: 'idle',
@@ -92,7 +92,7 @@ export function EligibilityForm() {
 
       {state.status === 'success' && state.result && (
         <Alert variant={state.result.isEligible ? 'success' : 'destructive'}>
-           {state.result.isEligible ? <CheckCircle className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
+           <BloodDropEmotionIcon isEligible={state.result.isEligible} className="h-4 w-4" />
           <AlertTitle>
             {state.result.isEligible ? 'Likely Eligible to Donate' : 'Potential Deferral'}
           </AlertTitle>
@@ -104,7 +104,7 @@ export function EligibilityForm() {
       )}
        {state.status === 'error' && (
         <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
+          <BloodDropEmotionIcon isEligible={false} className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>{state.message}</AlertDescription>
         </Alert>
