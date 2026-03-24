@@ -2,9 +2,9 @@
   "placeholderImages": [
     {
       "id": "hero-background",
-      "description": "A person donating blood with a heart-shaped stress ball.",
-      "imageUrl": "https://images.unsplash.com/photo-1542363102-135914685392?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
-      "imageHint": "blood donation"
+      "description": "A nurse preparing for a blood donation.",
+      "imageUrl": "https://picsum.photos/seed/hero/1920/1080",
+      "imageHint": "nurse smiling"
     },
     {
       "id": "hospital-logo-1",
