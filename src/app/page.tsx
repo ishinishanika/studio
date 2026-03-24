@@ -4,12 +4,9 @@ import { ArrowRight, Users, Droplets, HeartHandshake, MapPin, Calendar, Bell } f
 
 import { Button } from "@/components/ui/button";
 import { BloodyNetLogo } from "@/components/icons";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Badge } from "@/components/ui/badge";
 
 export default function Home() {
-  const heroImage = PlaceHolderImages.find(p => p.id === "hero-background");
-
   return (
     <div className="flex flex-col min-h-[100dvh] bg-background">
       <header className="absolute inset-x-0 top-0 z-50 p-4 md:px-6">
@@ -33,15 +30,7 @@ export default function Home() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative w-full h-[80vh] min-h-[600px] flex items-center justify-center text-center">
-          <Image
-            src={heroImage?.imageUrl || ''}
-            alt={heroImage?.description || "A nurse preparing for a blood donation."}
-            fill
-            className="object-cover"
-            data-ai-hint={heroImage?.imageHint}
-          />
-          <div className="absolute inset-0 bg-black/50" />
+        <section className="relative w-full h-[80vh] min-h-[600px] flex items-center justify-center text-center bg-gradient-to-br from-primary to-accent">
           <div className="relative z-10 container px-4 md:px-6 text-primary-foreground">
             <div className="flex flex-col items-center space-y-6">
                <Badge variant="secondary" className="text-sm py-1 px-3 bg-white/20 border-none backdrop-blur-sm text-primary-foreground">
