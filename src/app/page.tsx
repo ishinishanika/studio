@@ -59,7 +59,7 @@ export default function Home() {
                     <ArrowRight className="ml-2" />
                   </Link>
                 </Button>
-                 <Button asChild size="lg" variant="outline">
+                 <Button asChild size="lg" variant="outline" className="text-foreground">
                   <Link href="/donations">
                     Find a Drive
                   </Link>
