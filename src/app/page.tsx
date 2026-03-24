@@ -15,6 +15,7 @@ export default function Home() {
       <header className="absolute inset-x-0 top-0 z-50 p-4 md:px-6">
         <nav className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
+            <BloodyNetLogo className="h-8 w-8 text-primary" />
             <span className="text-xl font-bold tracking-tight text-primary">
               LifeFlow
             </span>
