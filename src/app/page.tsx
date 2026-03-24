@@ -46,20 +46,20 @@ export default function Home() {
                <Badge variant="secondary" className="text-sm py-1 px-3 bg-white/20 border-none backdrop-blur-sm text-primary-foreground">
                 Every Drop Counts. Every Donor Matters.
               </Badge>
-              <h1 className="text-4xl font-bold tracking-tighter sm:text-6xl xl:text-7xl/none font-headline">
+              <h1 className="text-4xl font-bold tracking-tighter sm:text-6xl xl:text-7xl/none">
                 Your Donation Can Save a Life
               </h1>
               <p className="max-w-[700px] text-lg text-primary-foreground/80 md:text-xl">
                 Join a network of heroes dedicated to making a difference. LifeFlow connects you with opportunities to give blood and save lives in your community.
               </p>
               <div className="flex flex-col gap-4 min-[400px]:flex-row">
-                <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90">
+                <Button asChild size="lg">
                   <Link href="/register">
                     Become a Donor
                     <ArrowRight className="ml-2" />
                   </Link>
                 </Button>
-                 <Button asChild size="lg" variant="outline" className="border-primary-foreground text-primary-foreground bg-transparent hover:bg-primary-foreground hover:text-primary">
+                 <Button asChild size="lg" variant="outline">
                   <Link href="/donations">
                     Find a Drive
                   </Link>
@@ -145,7 +145,7 @@ export default function Home() {
                     </p>
                 </div>
                 <div className="mx-auto w-full max-w-sm space-y-2">
-                     <Button asChild size="lg" variant="secondary" className="bg-white text-primary hover:bg-white/90">
+                     <Button asChild size="lg" variant="secondary">
                         <Link href="/register">
                             Join LifeFlow Now
                         </Link>
