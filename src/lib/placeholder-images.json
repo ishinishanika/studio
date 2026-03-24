@@ -2,9 +2,9 @@
   "placeholderImages": [
     {
       "id": "hero-background",
-      "description": "A person donating blood with a smile.",
-      "imageUrl": "https://picsum.photos/seed/donation/1920/1080",
-      "imageHint": "blood donation"
+      "description": "A collection of blood donation equipment.",
+      "imageUrl": "https://picsum.photos/seed/equipment/1920/1080",
+      "imageHint": "blood donation equipment"
     },
     {
       "id": "hospital-logo-1",
