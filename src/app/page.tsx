@@ -60,7 +60,7 @@ export default function Home() {
                     <ArrowRight className="ml-2" />
                   </Link>
                 </Button>
-                 <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
+                 <Button asChild size="lg" variant="outline" className="border-primary-foreground text-primary-foreground bg-transparent hover:bg-primary-foreground hover:text-primary">
                   <Link href="/donations">
                     Find a Drive
                   </Link>

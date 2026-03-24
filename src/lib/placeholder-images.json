@@ -2,9 +2,9 @@
   "placeholderImages": [
     {
       "id": "hero-background",
-      "description": "A nurse preparing for a blood donation.",
-      "imageUrl": "https://picsum.photos/seed/hero/1920/1080",
-      "imageHint": "nurse smiling"
+      "description": "A person donating blood with a smile.",
+      "imageUrl": "https://picsum.photos/seed/donation/1920/1080",
+      "imageHint": "blood donation"
     },
     {
       "id": "hospital-logo-1",
